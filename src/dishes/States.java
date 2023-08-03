@@ -1,7 +1,8 @@
 package dishes;
 
 public enum States {
-    BOLED("Bolied", 1), FRIED("Fried", 2), CHOPPED("Chopped", 3);
+    BOLED("Bolied", 1), FRIED("Fried", 2), CHOPPED("Chopped", 3),
+    WITH_SPICES ("WithSpices", 4), WITH_SAUCE("WithSauce", 5);
 
 
     public final int number;

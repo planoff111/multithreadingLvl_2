@@ -7,9 +7,9 @@ public class Dish {
     }
     private String name;
     private List<String> ingridients;
-    private States states;
+    private List<States> states;
 
-    public Dish(String name, List<String> ingridients, States states) {
+    public Dish(String name, List<String> ingridients, List<States> states) {
         this.name = name;
         this.ingridients = ingridients;
         this.states = states;
@@ -23,7 +23,7 @@ public class Dish {
         return ingridients;
     }
 
-    public States getStates() {
+    public List<States> getStates() {
         return states;
     }
 }

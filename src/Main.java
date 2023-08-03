@@ -30,7 +30,7 @@ public class Main {
         return choose;
     }
 
-    public static void chooseEdit(int choose){
+    public static void chooseEdit(int choose) {
         Kitchen kitchen = new Kitchen();
         Zal zal = new Zal();
         if (choose == 1){
@@ -52,6 +52,7 @@ public class Main {
             cook1.start();
             cook2.start();
             cook3.start();
+
 
         }
 
