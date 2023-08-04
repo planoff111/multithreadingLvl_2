@@ -9,8 +9,8 @@ public class Stove {
     public Stove(int permits) {
         this.semaphore = new Semaphore(permits);
     }
-    public void tryToCook() throws InterruptedException {
-        semaphore.acquire();
+    public boolean tryToCook() throws InterruptedException {
+       return semaphore.tryAcquire();
     }
 
     public void releaseTheStove() {

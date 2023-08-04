@@ -42,16 +42,14 @@ public class Main {
         }
             chooseEdit(choose());
         } else if (choose == 2) {
-            List<String> order = zal.getOrder();
             Stove stove = new Stove(2);
-            Cook cook = new Cook("Sasha","employee.Cook",order,stove);
-            Cook cook1 = new Cook("Ivan","employee.Cook",order,stove);
-            Cook cook2 = new Cook("Petro","employee.Cook",order,stove);
-            Cook cook3 = new Cook("Eugene","employee.Cook",order,stove);
-            cook.start();
-            cook1.start();
-            cook2.start();
-            cook3.start();
+            List<Cook> cooks = new ArrayList<>();
+
+            cooks.add(new Cook("Петро", stove));
+            cooks.add(new Cook("Євген", stove));
+            cooks.add(new Cook("Вахтанг", stove));
+            cooks.add(new Cook("Іван", stove));
+
 
 
         }

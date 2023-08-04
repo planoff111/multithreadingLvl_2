@@ -1,25 +1,26 @@
 package employee;
 
 import dishes.Dish;
+import dishes.States;
 import restoranEntity.Kitchen;
 import restoranEntity.Stove;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Cook extends  Thread{
-    Kitchen kitchen = new Kitchen();
+public class Cook implements Runnable{
     public List<String> order;
     public String name;
-    public String position;
     Stove stove ;
     private boolean isReady = false;
     Dish dishToCook;
 
 
-    public Cook(String name, String position,List<String> order,Stove stove) {
+    public Cook(String name,Stove stove) {
         this.name = name;
-        this.position = position;
-        this.order = order;
         this.stove = stove;
     }
 
@@ -40,20 +41,20 @@ public class Cook extends  Thread{
         System.out.println("I'm frying " + dishToCook.getName());
     }
 
+    public void bake() {
+        System.out.println("I'm baking " + dishToCook.getName());
+    }
 
     public void chop() {
         System.out.println("I'm chopping " + dishToCook.getName());
     }
 
 
+
     @Override
     public void run() {
 
-        try {
-            kitchen.orderFinal(order,kitchen.getDish(),name);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
 
 
     }
