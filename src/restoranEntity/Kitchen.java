@@ -8,7 +8,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Kitchen {
-    Stove stove = new Stove(2);
+
+    public Kitchen() {
+    }
+
+
+
+
+
 
 
     public HashMap<String, Dish> getDish() {
@@ -48,11 +55,12 @@ public class Kitchen {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
                     .filter(dish -> dish.getKey().equals(order))
-                    .filter(dish -> dish.getValue().getStates().equals(States.WITH_SPICES))
+                    .filter(dish -> dish.getValue().getStates().contains(States.WITH_SPICES))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
         }
+
         return validDishes;
     }
 
@@ -66,6 +74,7 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
+
         }
         return validDishes;
     }
@@ -81,6 +90,7 @@ public class Kitchen {
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
         }
+
         return validDishes;
     }
 
@@ -95,6 +105,7 @@ public class Kitchen {
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
         }
+
         return validDishes;
     }
 
@@ -110,7 +121,9 @@ public class Kitchen {
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
         }
+
         return validDishes;
+
     }
 
     public List<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) {
@@ -120,9 +133,10 @@ public class Kitchen {
         validDishes.addAll(boil);
         validDishes.addAll(sause);
         validDishes.addAll(spices);
-
         return validDishes;
     }
+
+
 
 
 }

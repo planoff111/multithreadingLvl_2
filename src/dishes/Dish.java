@@ -1,6 +1,7 @@
 package dishes;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Dish {
     public Dish() {
@@ -26,4 +27,6 @@ public class Dish {
     public List<States> getStates() {
         return states;
     }
+
+
 }

@@ -12,7 +12,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws InterruptedException {
+
         Zal.welcome();
         chooseEdit(choose());
 
@@ -33,9 +35,11 @@ public class Main {
         return choose;
     }
 
-    public static void chooseEdit(int choose) {
-        Kitchen kitchen = new Kitchen();
+    public static void chooseEdit(int choose) throws InterruptedException {
         Zal zal = new Zal();
+        Stove stove = new Stove(2);
+        Kitchen kitchen = new Kitchen();
+
         if (choose == 1) {
             System.out.println("Menu : ");
             List<Dish> menu = new ArrayList<>(kitchen.getDish()
@@ -45,30 +49,17 @@ public class Main {
             }
             chooseEdit(choose());
         } else if (choose == 2) {
-
-            Stove stove = new Stove(2);
-
-            Cook cook = new Cook("Петро", stove);
-            Cook cook1 = new Cook("Євген", stove);
-            Cook cook2 = new Cook("Вахтанг", stove);
-            Cook cook3 = new Cook("Іван", stove);
+           List<String> order = zal.getOrder();
+            Cook cook = new Cook("Вахтанг",stove,order);
+            Cook cook1 = new Cook("Ivan",stove,order);
+            Cook cook2 = new Cook("Petro",stove,order);
+            Cook cook3 = new Cook("Olia",stove,order);
             cook.start();
             cook1.start();
             cook2.start();
             cook3.start();
 
-            try {
-                cook.join();
-                cook1.join();
-                cook2.join();
-                cook3.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
 
         }
-
-
     }
 }

@@ -4,6 +4,9 @@ import java.util.concurrent.Semaphore;
 
 public class Stove {
 
+    public Stove() {
+    }
+
     private Semaphore semaphore;
 
     public Stove(int permits) {

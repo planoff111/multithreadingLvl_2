@@ -23,6 +23,7 @@ public class Zal {
         String[] items = inputItems.split(",");
         for (String item : items) {
             order.add(item);
+
         }
         return order;
     }
