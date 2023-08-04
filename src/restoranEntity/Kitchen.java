@@ -8,9 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Kitchen {
-    Cook cook;
     Stove stove = new Stove(2);
-
 
 
     public HashMap<String, Dish> getDish() {
@@ -115,7 +113,7 @@ public class Kitchen {
         return validDishes;
     }
 
-    public List<Dish> finalOrder(List<Dish> chop,List<Dish> fry,List<Dish> boil,List<Dish> sause, List<Dish> spices){
+    public List<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) {
         List<Dish> validDishes = new ArrayList<>();
         validDishes.addAll(chop);
         validDishes.addAll(fry);
@@ -127,17 +125,5 @@ public class Kitchen {
     }
 
 
-    private void useTheStove(List<Dish> finalOrder) throws InterruptedException {
-        if (stove.getAvailiableSpots() > 0) {
-            if (stove.tryToCook()) {
-                if (finalOrder.contains(States.FRIED)) {
-                    cook.fry();
-                } else if (finalOrder.contains(States.BOLED)) {
-                    cook.boil();
-
-                    Thread.sleep(5000);
-                }
-            }
-        }
-    }
 }
+

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Zal {
 
-    public void welcome() {
+    public static void welcome() {
         Customer customer = new Customer();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Вітаємо вас в ресторані *Від Олександра*\n" +
