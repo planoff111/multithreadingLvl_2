@@ -46,26 +46,21 @@ public class Kitchen {
         Lock lock = new ReentrantLock();
         int limit = finalOrder.size();
         Deque<Dish> queOfDish = new ArrayDeque<>(finalOrder);
-
+        Queue<Cook> cooks = new ArrayDeque<>();
         for (Dish dish : queOfDish) {
-            Queue<Cook> cooks = new ArrayDeque<>();
             cooks.add(new Cook("Петро", stove, dish, lock, table));
             cooks.add(new Cook("Євген", stove, dish, lock, table));
             cooks.add(new Cook("Вахтанг", stove, dish, lock, table));
             cooks.add(new Cook("Іван", stove, dish, lock, table));
-            Queue<Cook> reqForCook = cooks.stream().limit(limit).collect(Collectors.toCollection(ArrayDeque::new));
-            try {
-                while (!reqForCook.isEmpty() && !queOfDish.isEmpty()) {
-                    Cook cookQue = reqForCook.poll();
-                    cookQue.setDish(queOfDish.poll());
-                    Thread thread = new Thread(cookQue);
-                    thread.start();
-                    thread.join();
 
-                }
-            }catch (ConcurrentModificationException e){
-                System.out.println(e);
-            }
+        }
+        Queue<Cook> reqForCook = cooks.stream().limit(limit).collect(Collectors.toCollection(ArrayDeque::new));
+        while (!reqForCook.isEmpty() && !queOfDish.isEmpty()) {
+            Cook cookQue = reqForCook.poll();
+            cookQue.setDish(queOfDish.poll());
+            Thread thread = new Thread(cookQue);
+            thread.start();
+            thread.join();
 
         }
     }

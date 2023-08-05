@@ -70,8 +70,8 @@ public class Cook extends Thread {
                 } else if (dish.getStates().contains(States.BOLED)) {
                     boil(dish);
                 }
+                stove.releaseTheStove();
                 Thread.sleep(1000);
-
             }
         }
     }
@@ -88,8 +88,9 @@ public class Cook extends Thread {
                 if (dish.getStates().contains(States.WITH_SAUCE)) {
                     addSause(dish);
                 }
-                Thread.sleep(1000);
-            }
+
+            } table.releaseTheTable();
+            Thread.sleep(1000);
         }
     }
 
