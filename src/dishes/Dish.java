@@ -28,5 +28,12 @@ public class Dish {
         return states;
     }
 
-
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "name='" + name + '\'' +
+                ", ingridients=" + ingridients +
+                ", states=" + states +
+                '}';
+    }
 }

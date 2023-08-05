@@ -2,20 +2,18 @@ package restoranEntity;
 
 import java.util.concurrent.Semaphore;
 
-public class Stove {
-
-
+public class Table {
 
     private Semaphore semaphore;
 
-    public Stove(int permits) {
+    public Table(int permits) {
         this.semaphore = new Semaphore(permits);
     }
-    public boolean tryToCook() throws InterruptedException {
-       return semaphore.tryAcquire();
+    public boolean tryToUseTable() throws InterruptedException {
+        return semaphore.tryAcquire();
     }
 
-    public void releaseTheStove() {
+    public void releaseTheTable() {
         semaphore.release();
     }
 

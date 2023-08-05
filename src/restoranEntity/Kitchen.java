@@ -5,6 +5,9 @@ import dishes.States;
 import employee.Cook;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public class Kitchen {
@@ -22,7 +25,7 @@ public class Kitchen {
         HashMap<String, Dish> listDish = new HashMap<>();
         listDish.put("паста", new Dish("Паста",
                 List.of("Макарони", "Моцарела", "Соус Болоньєз"),
-                List.of(States.BOLED, States.CHOPPED, States.WITH_SAUCE, States.WITH_SPICES)));
+                List.of(States.BOLED, States.WITH_SAUCE)));
         listDish.put("вареники", new Dish("Вареники",
                 List.of("Тісто", "Начинка", "Масло"),
                 List.of(States.BOLED, States.WITH_SAUCE, States.WITH_SPICES)));
@@ -31,7 +34,7 @@ public class Kitchen {
                 List.of(States.CHOPPED, States.WITH_SAUCE)));
         listDish.put("борщ", new Dish("Борщ",
                 List.of("Вода", "Мясо", "Буряк", "Морква", "Картопля", "Зажарка"),
-                List.of(States.BOLED, States.CHOPPED, States.WITH_SAUCE, States.WITH_SPICES)));
+                List.of(States.BOLED, States.CHOPPED, States.WITH_SPICES)));
         listDish.put("уха", new Dish("Уха",
                 List.of("Риба", "Вода", "Картопля"),
                 List.of(States.BOLED, States.CHOPPED, States.WITH_SAUCE)));
@@ -43,7 +46,7 @@ public class Kitchen {
                 List.of(States.CHOPPED, States.WITH_SAUCE, States.WITH_SPICES)));
         listDish.put("картопля фрі", new Dish("Картопля Фрі",
                 List.of("Картопля", "Олія", "Кетчуп фірмовий"),
-                List.of(States.FRIED, States.CHOPPED, States.WITH_SAUCE, States.WITH_SPICES)));
+                List.of(States.FRIED, States.CHOPPED, States.WITH_SAUCE)));
 
 
         return listDish;
@@ -74,7 +77,7 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
-
+            System.out.println(validDishes);
         }
         return validDishes;
     }
@@ -90,6 +93,7 @@ public class Kitchen {
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
         }
+        System.out.println(validDishes);
 
         return validDishes;
     }
@@ -126,14 +130,18 @@ public class Kitchen {
 
     }
 
-    public List<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) {
-        List<Dish> validDishes = new ArrayList<>();
-        validDishes.addAll(chop);
-        validDishes.addAll(fry);
-        validDishes.addAll(boil);
-        validDishes.addAll(sause);
-        validDishes.addAll(spices);
-        return validDishes;
+    public List<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) throws InterruptedException {
+        List<Dish> finalOrder = new ArrayList<>();
+
+            finalOrder.addAll(chop);
+            finalOrder.addAll(fry);
+            finalOrder.addAll(boil);
+            finalOrder.addAll(sause);
+            finalOrder.addAll(spices);
+
+        System.out.println(finalOrder);
+
+        return finalOrder;
     }
 
 

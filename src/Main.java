@@ -1,13 +1,16 @@
+import dishes.States;
 import employee.Cook;
 import dishes.Dish;
 import restoranEntity.Kitchen;
 import restoranEntity.Stove;
+import restoranEntity.Table;
 import restoranEntity.Zal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -38,6 +41,7 @@ public class Main {
     public static void chooseEdit(int choose) throws InterruptedException {
         Zal zal = new Zal();
         Stove stove = new Stove(2);
+        Table table = new Table(4);
         Kitchen kitchen = new Kitchen();
 
         if (choose == 1) {
@@ -48,16 +52,38 @@ public class Main {
                 System.out.println(dish.getName());
             }
             chooseEdit(choose());
+
         } else if (choose == 2) {
-           List<String> order = zal.getOrder();
-            Cook cook = new Cook("Вахтанг",stove,order);
-            Cook cook1 = new Cook("Ivan",stove,order);
-            Cook cook2 = new Cook("Petro",stove,order);
-            Cook cook3 = new Cook("Olia",stove,order);
-            cook.start();
-            cook1.start();
-            cook2.start();
-            cook3.start();
+            Lock lock = new ReentrantLock();
+            List<String> order = zal.getOrder();
+            int limit = order.size();
+
+            Queue<Cook> cooks = new ArrayDeque<>();
+            cooks.add(new Cook("Петро", stove, order, lock,table));
+            cooks.add(new Cook("Євген", stove, order, lock,table));
+            cooks.add(new Cook("Вахтанг", stove, order, lock,table));
+            cooks.add(new Cook("Іван", stove, order, lock,table));
+            cooks.add(new Cook("Анна", stove, order, lock,table));
+
+            Queue<Cook> reqForCook = cooks.stream()
+                    .limit(limit).collect(Collectors.toCollection(ArrayDeque::new));
+
+
+
+            List<Thread> threads = new ArrayList<>();
+            for (Cook cook : reqForCook) {
+                Thread thread = new Thread(cook);
+                threads.add(thread);
+                thread.start();
+
+            }
+            for (Thread thread : threads) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
 
         }
