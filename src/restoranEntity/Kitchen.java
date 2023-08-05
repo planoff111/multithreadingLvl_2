@@ -5,6 +5,8 @@ import dishes.States;
 import employee.Cook;
 
 import java.util.*;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -19,7 +21,7 @@ public class Kitchen {
 
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public synchronized HashMap<String, Dish> getDish() {
+    public  HashMap<String, Dish> getDish() {
         HashMap<String, Dish> listDish = new HashMap<>();
         listDish.put("паста", new Dish("Паста",
                 List.of("Макарони", "Моцарела", "Соус Болоньєз"),
@@ -60,12 +62,8 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
             lock.writeLock().lock();
-            try{
-                validDishes.addAll(filteredDishes);
-            }finally {
-                lock.writeLock().unlock();
-            }
 
+                validDishes.addAll(filteredDishes);
         }
 
         return Collections.synchronizedList(validDishes);
@@ -81,12 +79,8 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
 
-            lock.writeLock().lock();
-            try{
+
                 validDishes.addAll(filteredDishes);
-            }finally {
-                lock.writeLock().unlock();
-            }
         }
         return Collections.synchronizedList(validDishes);
     }
@@ -100,12 +94,9 @@ public class Kitchen {
                     .filter(dish -> dish.getValue().getStates().contains(States.BOLED))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            lock.writeLock().lock();
-            try{
+
                 validDishes.addAll(filteredDishes);
-            }finally {
-                lock.writeLock().unlock();
-            }
+
         }
 
         return Collections.synchronizedList(validDishes);
@@ -120,19 +111,16 @@ public class Kitchen {
                     .filter(dish -> dish.getValue().getStates().contains(States.FRIED))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            lock.writeLock().lock();
-            try{
+
                 validDishes.addAll(filteredDishes);
-            }finally {
-                lock.writeLock().unlock();
-            }
+
         }
 
         return Collections.synchronizedList(validDishes);
     }
 
 
-    public List<Dish> chopFilter(List<String> orders, HashMap<String, Dish> dishes) {
+    public synchronized List<Dish> chopFilter(List<String> orders, HashMap<String, Dish> dishes) {
         List<Dish> validDishes = new ArrayList<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
@@ -141,32 +129,31 @@ public class Kitchen {
                     .filter(dish -> dish.getValue().getStates().contains(States.CHOPPED))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            lock.writeLock().lock();
-            try{
+
                 validDishes.addAll(filteredDishes);
-            }finally {
-                lock.writeLock().unlock();
-            }
+
         }
 
         return Collections.synchronizedList(validDishes);
 
     }
 
-    public  HashSet<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) throws InterruptedException {
-        HashSet<Dish> finalOrder = new HashSet<>();
-        lock.writeLock().lock();
-        try{
-            finalOrder.addAll(chop);
-            finalOrder.addAll(fry);
-            finalOrder.addAll(boil);
-            finalOrder.addAll(sause);
-            finalOrder.addAll(spices);
-        }finally {
-            lock.writeLock().unlock();
-        }
+    public HashSet<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) throws InterruptedException {
+        BlockingDeque<Dish> order = new LinkedBlockingDeque<>();
 
-        System.out.println(finalOrder+ " final order");
+            order.addAll(chop);
+            order.addAll(fry);
+            order.addAll(boil);
+            order.addAll(sause);
+            order.addAll(spices);
+            order.stream()
+                    .map(Dish::getName)
+                    .forEach(dish -> System.out.println(dish + " final order" + Thread.currentThread().getName()));
+
+            HashSet<Dish> finalOrder = new HashSet<>(order);
+            finalOrder.stream()
+                    .map(Dish::getName)
+                    .forEach(dish -> System.out.println(dish + " final order in hash" + Thread.currentThread().getName()));
 
         return finalOrder;
     }
