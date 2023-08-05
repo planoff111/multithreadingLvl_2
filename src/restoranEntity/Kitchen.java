@@ -2,15 +2,8 @@ package restoranEntity;
 
 import dishes.Dish;
 import dishes.States;
-import employee.Cook;
 
 import java.util.*;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
@@ -52,8 +45,8 @@ public class Kitchen {
         return listDish;
     }
 
-    public  HashSet<Dish> filterOrder(List<String> orders, HashMap<String, Dish> dishes) {
-        BlockingDeque<Dish> validDishes = new LinkedBlockingDeque<>();
+    public synchronized   HashSet<Dish> filterOrder(List<String> orders, HashMap<String, Dish> dishes) {
+        List<Dish> validDishes = new ArrayList<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
