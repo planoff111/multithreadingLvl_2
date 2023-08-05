@@ -56,7 +56,7 @@ public class Cook extends Thread {
         Deque<Dish> queOfDish = new ArrayDeque<>(finalOrder);
         queOfDish.stream()
                 .map(Dish::getName)
-                .forEach(dish -> System.out.println(dish + Thread.currentThread().getName()));
+                .forEach(dish -> System.out.println(dish + " que " + Thread.currentThread().getName()));
         try {
             for (Dish dish : queOfDish) {
                 queOfDish.poll();
