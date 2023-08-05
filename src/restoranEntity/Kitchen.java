@@ -53,7 +53,6 @@ public class Kitchen {
                     .filter(dish -> dish.getKey().equals(order))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            lock.writeLock().lock();
 
             validDishes.addAll(filteredDishes);
             System.out.println(validDishes);
