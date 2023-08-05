@@ -8,14 +8,12 @@ import restoranEntity.Table;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.stream.Collectors;
 
 public class Cook extends Thread {
+    private final Object lock1 = new Object();
     private String name;
     private Stove stove;
     volatile List<String> order;
@@ -53,23 +51,25 @@ public class Cook extends Thread {
     }
 
 
-    public void startCook(List<Dish> finalOrder) throws InterruptedException {
+    public void startCook(HashSet<Dish> finalOrder) throws InterruptedException {
+        Deque<Dish> queOfDish = new ArrayDeque<>(finalOrder);
+        for (Dish dish : queOfDish) {
+            queOfDish.poll();
+            synchronized (lock1) {
+                if (dish.getStates().contains(States.FRIED) || dish.getStates().contains(States.BOLED)) {
+                    useTheStove(dish);
+                }
+            }
+            synchronized (lock1) {
+                if (dish.getStates().contains(States.CHOPPED)
+                        || dish.getStates().contains(States.WITH_SAUCE)
+                        || dish.getStates().contains(States.WITH_SPICES)) {
+                    useTheTable(dish);
+                }
+            }
 
-            for (Dish dish: finalOrder){
-            if (dish.getStates().contains(States.FRIED) || dish.getStates().contains(States.BOLED)) {
-                useTheStove(dish);
-            }
-            if (dish.getStates().contains(States.CHOPPED)
-                    || dish.getStates().contains(States.WITH_SAUCE)
-                    || dish.getStates().contains(States.WITH_SPICES)){
-                useTheTable(dish);
-            }
 
         }
-
-
-
-
 
 
     }

@@ -16,7 +16,7 @@ public class Zal {
         System.out.println("Дуже приємно " + customer.getName());
     }
 
-    public List<String> getOrder() throws InterruptedException {
+    public synchronized List<String> getOrder() throws InterruptedException {
         Semaphore semaphore = new Semaphore(1);
         List<String> order = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -28,7 +28,6 @@ public class Zal {
         for (String item : items) {
             order.add(item);
         }
-
         return order;
     }
 

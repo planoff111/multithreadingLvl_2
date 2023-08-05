@@ -41,7 +41,7 @@ public class Main {
     public static void chooseEdit(int choose) throws InterruptedException {
         Zal zal = new Zal();
         Stove stove = new Stove(2);
-        Table table = new Table(4);
+        Table table = new Table(2);
         Kitchen kitchen = new Kitchen();
 
         if (choose == 1) {
