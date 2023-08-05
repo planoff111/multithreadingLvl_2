@@ -17,13 +17,11 @@ public class Zal {
     }
 
     public synchronized List<String> getOrder() throws InterruptedException {
-        Semaphore semaphore = new Semaphore(1);
         List<String> order = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введіть ваше замовлення через кому без дублів і без пробілів і страви, які є в наявності!");
         String inputItems = scanner.nextLine().toLowerCase();
         String[] items = inputItems.split(",");
-        semaphore.acquire();
 
         for (String item : items) {
             order.add(item);

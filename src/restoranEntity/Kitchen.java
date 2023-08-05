@@ -21,17 +21,17 @@ public class Kitchen {
 
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public  HashMap<String, Dish> getDish() {
+    public synchronized HashMap<String, Dish> getDish() {
         HashMap<String, Dish> listDish = new HashMap<>();
         listDish.put("паста", new Dish("Паста",
                 List.of("Макарони", "Моцарела", "Соус Болоньєз"),
-                List.of(States.BOLED, States.WITH_SAUCE,States.WITH_SPICES)));
+                List.of(States.BOLED, States.WITH_SAUCE, States.WITH_SPICES)));
         listDish.put("вареники", new Dish("Вареники",
                 List.of("Тісто", "Начинка", "Масло"),
-                List.of(States.BOLED, States.WITH_SAUCE,States.WITH_SPICES)));
+                List.of(States.BOLED, States.WITH_SAUCE, States.WITH_SPICES)));
         listDish.put("салат греческий", new Dish("Салат Греческий",
                 List.of("Оливки", "Фета", "Салат", "Оливкова олія"),
-                List.of(States.CHOPPED, States.WITH_SAUCE,States.WITH_SPICES)));
+                List.of(States.CHOPPED, States.WITH_SAUCE, States.WITH_SPICES)));
         listDish.put("борщ", new Dish("Борщ",
                 List.of("Вода", "Мясо", "Буряк", "Морква", "Картопля", "Зажарка"),
                 List.of(States.BOLED, States.CHOPPED, States.WITH_SPICES)));
@@ -52,8 +52,8 @@ public class Kitchen {
         return listDish;
     }
 
-    public synchronized List<Dish> addSpicesFilter(List<String> orders, HashMap<String, Dish> dishes) {
-        List<Dish> validDishes = new ArrayList<>();
+    public  HashSet<Dish> addSpicesFilter(List<String> orders, HashMap<String, Dish> dishes) {
+        HashSet<Dish> validDishes = new HashSet<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
@@ -63,14 +63,14 @@ public class Kitchen {
                     .collect(Collectors.toList());
             lock.writeLock().lock();
 
-                validDishes.addAll(filteredDishes);
+            validDishes.addAll(filteredDishes);
         }
 
-        return Collections.synchronizedList(validDishes);
+        return validDishes;
     }
 
-    public synchronized List<Dish> addSauseFilter(List<String> orders, HashMap<String, Dish> dishes) {
-        List<Dish> validDishes = new ArrayList<>();
+    public  HashSet<Dish> addSauseFilter(List<String> orders, HashMap<String, Dish> dishes) {
+        HashSet<Dish> validDishes = new HashSet<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
@@ -80,13 +80,13 @@ public class Kitchen {
                     .collect(Collectors.toList());
 
 
-                validDishes.addAll(filteredDishes);
+            validDishes.addAll(filteredDishes);
         }
-        return Collections.synchronizedList(validDishes);
+        return validDishes;
     }
 
-    public synchronized List<Dish> boilFilter(List<String> orders, HashMap<String, Dish> dishes) {
-        List<Dish> validDishes = new ArrayList<>();
+    public  HashSet<Dish> boilFilter(List<String> orders, HashMap<String, Dish> dishes) {
+        HashSet<Dish> validDishes = new HashSet<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
@@ -95,15 +95,15 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
 
-                validDishes.addAll(filteredDishes);
+            validDishes.addAll(filteredDishes);
 
         }
 
-        return Collections.synchronizedList(validDishes);
+        return validDishes;
     }
 
-    public synchronized List<Dish> fryFilter(List<String> orders, HashMap<String, Dish> dishes) {
-        List<Dish> validDishes = new ArrayList<>();
+    public  HashSet<Dish> fryFilter(List<String> orders, HashMap<String, Dish> dishes) {
+        HashSet<Dish> validDishes = new HashSet<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
@@ -112,16 +112,16 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
 
-                validDishes.addAll(filteredDishes);
+            validDishes.addAll(filteredDishes);
 
         }
 
-        return Collections.synchronizedList(validDishes);
+        return validDishes;
     }
 
 
-    public synchronized List<Dish> chopFilter(List<String> orders, HashMap<String, Dish> dishes) {
-        List<Dish> validDishes = new ArrayList<>();
+    public  HashSet<Dish> chopFilter(List<String> orders, HashMap<String, Dish> dishes) {
+        HashSet<Dish> validDishes = new HashSet<>();
         for (String order : orders) {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
@@ -130,15 +130,15 @@ public class Kitchen {
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
 
-                validDishes.addAll(filteredDishes);
-
+            validDishes.addAll(filteredDishes);
         }
-
-        return Collections.synchronizedList(validDishes);
+        return validDishes;
 
     }
 
-    public HashSet<Dish> finalOrder(List<Dish> chop, List<Dish> fry, List<Dish> boil, List<Dish> sause, List<Dish> spices) throws InterruptedException {
+    public synchronized HashSet<Dish> finalOrder(HashSet<Dish> chop,
+                                                 HashSet<Dish> fry, HashSet<Dish> boil,
+                                                 HashSet<Dish> sause, HashSet<Dish> spices) {
         BlockingDeque<Dish> order = new LinkedBlockingDeque<>();
 
             order.addAll(chop);
@@ -150,15 +150,9 @@ public class Kitchen {
                     .map(Dish::getName)
                     .forEach(dish -> System.out.println(dish + " final order" + Thread.currentThread().getName()));
 
-            HashSet<Dish> finalOrder = new HashSet<>(order);
-            finalOrder.stream()
-                    .map(Dish::getName)
-                    .forEach(dish -> System.out.println(dish + " final order in hash" + Thread.currentThread().getName()));
 
-        return finalOrder;
+        return new HashSet<>(order);
     }
-
-
 
 
 }

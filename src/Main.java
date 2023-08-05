@@ -41,7 +41,7 @@ public class Main {
     public static void chooseEdit(int choose) throws InterruptedException {
         Zal zal = new Zal();
         Stove stove = new Stove(2);
-        Table table = new Table(2);
+        Table table = new Table(4);
         Kitchen kitchen = new Kitchen();
 
         if (choose == 1) {
@@ -63,7 +63,6 @@ public class Main {
             cooks.add(new Cook("Євген", stove, order, lock,table));
             cooks.add(new Cook("Вахтанг", stove, order, lock,table));
             cooks.add(new Cook("Іван", stove, order, lock,table));
-            cooks.add(new Cook("Анна", stove, order, lock,table));
 
             Queue<Cook> reqForCook = cooks.stream()
                     .limit(limit).collect(Collectors.toCollection(ArrayDeque::new));

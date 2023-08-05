@@ -10,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 
 public class Cook extends Thread {
@@ -29,38 +30,39 @@ public class Cook extends Thread {
 
     }
 
-    public void addSpices(Dish dish) {
+    public synchronized void addSpices(Dish dish) {
         System.out.println("Cook " + name + " adding spices to " + dish.getName());
     }
 
-    public void addSause(Dish dish) {
+    public synchronized void addSause(Dish dish) {
         System.out.println("Cook " + name + " adding sause to " + dish.getName());
     }
 
-    public void boil(Dish dish) {
+    public synchronized void boil(Dish dish) {
         System.out.println("Cook " + name + " boiling " + dish.getName());
     }
 
-    public void fry(Dish dish) {
+    public synchronized void fry(Dish dish) {
         System.out.println("Cook " + name + " frying " + dish.getName());
     }
 
 
-    public void chop(Dish dish) {
+    public synchronized void chop(Dish dish) {
         System.out.println("Cook " + name + " chopping ingridients for " + dish.getName());
     }
 
 
-    public void startCook(HashSet<Dish> finalOrder) throws InterruptedException {
+    public  void startCook(HashSet<Dish> finalOrder) {
         Deque<Dish> queOfDish = new ArrayDeque<>(finalOrder);
-        for (Dish dish : queOfDish) {
-            queOfDish.poll();
-            synchronized (lock1) {
+        queOfDish.stream()
+                .map(Dish::getName)
+                .forEach(dish -> System.out.println(dish + Thread.currentThread().getName()));
+        try {
+            for (Dish dish : queOfDish) {
+                queOfDish.poll();
                 if (dish.getStates().contains(States.FRIED) || dish.getStates().contains(States.BOLED)) {
                     useTheStove(dish);
                 }
-            }
-            synchronized (lock1) {
                 if (dish.getStates().contains(States.CHOPPED)
                         || dish.getStates().contains(States.WITH_SAUCE)
                         || dish.getStates().contains(States.WITH_SPICES)) {
@@ -68,7 +70,8 @@ public class Cook extends Thread {
                 }
             }
 
-
+        }catch (InterruptedException e){
+            System.out.println(e);
         }
 
 
@@ -88,7 +91,7 @@ public class Cook extends Thread {
         }
     }
 
-    private synchronized void useTheTable(Dish dish) throws InterruptedException {
+    private void useTheTable(Dish dish) throws InterruptedException {
         if (table.getAvailiableSpots() > 0) {
             if (table.tryToUseTable()) {
                 if (dish.getStates().contains(States.CHOPPED)) {
@@ -107,18 +110,15 @@ public class Cook extends Thread {
 
     @Override
     public void run() {
-        System.out.println();
         Kitchen kitchen = new Kitchen();
-        try {
-            startCook(kitchen.finalOrder(
-                    kitchen.addSauseFilter(order, kitchen.getDish()),
-                    kitchen.addSpicesFilter(order, kitchen.getDish()),
-                    kitchen.boilFilter(order, kitchen.getDish()),
-                    kitchen.chopFilter(order, kitchen.getDish()),
-                    kitchen.fryFilter(order, kitchen.getDish())));
-        } catch (InterruptedException e) {
-            System.out.println(e);
-        }
+        startCook(kitchen.finalOrder(
+                kitchen.addSauseFilter(order, kitchen.getDish()),
+                kitchen.addSpicesFilter(order, kitchen.getDish()),
+                kitchen.boilFilter(order, kitchen.getDish()),
+                kitchen.chopFilter(order, kitchen.getDish()),
+                kitchen.fryFilter(order, kitchen.getDish())));
+
+
     }
 
 }
