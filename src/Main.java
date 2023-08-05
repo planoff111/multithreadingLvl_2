@@ -1,10 +1,16 @@
+import dishes.States;
+import employee.Cook;
 import dishes.Dish;
 import restoranEntity.Kitchen;
+import restoranEntity.Stove;
+import restoranEntity.Table;
 import restoranEntity.Zal;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -48,6 +54,9 @@ public class Main {
         } else if (choose == 2) {
             List<String> order = zal.getOrder();
             kitchen.startCook(kitchen.filterOrder(order, kitchen.getDish()));
+
+
+
 
         }
     }

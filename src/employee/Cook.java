@@ -38,31 +38,31 @@ public class Cook extends Thread {
         this.dish = dish;
     }
 
-    public synchronized void addSpices(Dish dish) {
+    public  void addSpices(Dish dish) {
         System.out.println("Cook " + name + " adding spices to " + dish.getName());
     }
 
-    public synchronized void addSause(Dish dish) {
+    public  void addSause(Dish dish) {
         System.out.println("Cook " + name + " adding sause to " + dish.getName());
     }
 
-    public synchronized void boil(Dish dish) {
+    public  void boil(Dish dish) {
         System.out.println("Cook " + name + " boiling " + dish.getName());
     }
 
-    public synchronized void fry(Dish dish) {
+    public  void fry(Dish dish) {
         System.out.println("Cook " + name + " frying " + dish.getName());
     }
 
 
-    public synchronized void chop(Dish dish) {
+    public  void chop(Dish dish) {
         System.out.println("Cook " + name + " chopping ingridients for " + dish.getName());
     }
 
 
 
 
-    private synchronized void useTheStove(Dish dish) throws InterruptedException {
+    private  void useTheStove(Dish dish) throws InterruptedException {
         if (stove.getAvailiableSpots() > 0) {
             if (stove.tryToCook()) {
                 if (dish.getStates().contains(States.FRIED)) {
@@ -76,7 +76,7 @@ public class Cook extends Thread {
         }
     }
 
-    private void useTheTable(Dish dish) throws InterruptedException {
+    private synchronized void useTheTable(Dish dish) throws InterruptedException {
         if (table.getAvailiableSpots() > 0) {
             if (table.tryToUseTable()) {
                 if (dish.getStates().contains(States.CHOPPED)) {
