@@ -59,7 +59,6 @@ public class Cook extends Thread {
                 .forEach(dish -> System.out.println(dish + " que " + Thread.currentThread().getName()));
         try {
             for (Dish dish : queOfDish) {
-                queOfDish.poll();
                 if (dish.getStates().contains(States.FRIED) || dish.getStates().contains(States.BOLED)) {
                     useTheStove(dish);
                 }
@@ -111,12 +110,8 @@ public class Cook extends Thread {
     @Override
     public void run() {
         Kitchen kitchen = new Kitchen();
-        startCook(kitchen.finalOrder(
-                kitchen.addSauseFilter(order, kitchen.getDish()),
-                kitchen.addSpicesFilter(order, kitchen.getDish()),
-                kitchen.boilFilter(order, kitchen.getDish()),
-                kitchen.chopFilter(order, kitchen.getDish()),
-                kitchen.fryFilter(order, kitchen.getDish())));
+        startCook(kitchen.filterOrder(order,kitchen.getDish()));
+
 
 
     }
