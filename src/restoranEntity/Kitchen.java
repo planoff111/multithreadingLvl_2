@@ -28,7 +28,7 @@ public class Kitchen {
                 List.of(States.BOLED, States.WITH_SAUCE)));
         listDish.put("вареники", new Dish("Вареники",
                 List.of("Тісто", "Начинка", "Масло"),
-                List.of(States.BOLED, States.WITH_SAUCE, States.WITH_SPICES)));
+                List.of(States.BOLED, States.WITH_SAUCE)));
         listDish.put("салат греческий", new Dish("Салат Греческий",
                 List.of("Оливки", "Фета", "Салат", "Оливкова олія"),
                 List.of(States.CHOPPED, States.WITH_SAUCE)));
@@ -73,11 +73,10 @@ public class Kitchen {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
                     .filter(dish -> dish.getKey().equals(order))
-                    .filter(dish -> dish.getValue().getStates().equals(States.WITH_SAUCE))
+                    .filter(dish -> dish.getValue().getStates().contains(States.WITH_SAUCE))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
             validDishes.addAll(filteredDishes);
-            System.out.println(validDishes);
         }
         return validDishes;
     }
@@ -88,10 +87,9 @@ public class Kitchen {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
                     .filter(dish -> dish.getKey().equals(order))
-                    .filter(dish -> dish.getValue().getStates().equals(States.BOLED))
+                    .filter(dish -> dish.getValue().getStates().contains(States.BOLED))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            validDishes.addAll(filteredDishes);
         }
         System.out.println(validDishes);
 
@@ -104,10 +102,9 @@ public class Kitchen {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
                     .filter(dish -> dish.getKey().equals(order))
-                    .filter(dish -> dish.getValue().getStates().equals(States.FRIED))
+                    .filter(dish -> dish.getValue().getStates().contains(States.FRIED))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            validDishes.addAll(filteredDishes);
         }
 
         return validDishes;
@@ -120,10 +117,9 @@ public class Kitchen {
             List<Dish> filteredDishes = dishes.entrySet()
                     .stream()
                     .filter(dish -> dish.getKey().equals(order))
-                    .filter(dish -> dish.getValue().getStates().equals(States.CHOPPED))
+                    .filter(dish -> dish.getValue().getStates().contains(States.CHOPPED))
                     .map(Map.Entry::getValue)
                     .collect(Collectors.toList());
-            validDishes.addAll(filteredDishes);
         }
 
         return validDishes;
@@ -139,7 +135,6 @@ public class Kitchen {
             finalOrder.addAll(sause);
             finalOrder.addAll(spices);
 
-        System.out.println(finalOrder);
 
         return finalOrder;
     }

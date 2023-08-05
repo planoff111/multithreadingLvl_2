@@ -110,7 +110,8 @@ public class Cook extends Thread {
         System.out.println();
         Kitchen kitchen = new Kitchen();
         try {
-            startCook(kitchen.finalOrder(kitchen.addSauseFilter(order, kitchen.getDish()),
+            startCook(kitchen.finalOrder(
+                    kitchen.addSauseFilter(order, kitchen.getDish()),
                     kitchen.addSpicesFilter(order, kitchen.getDish()),
                     kitchen.boilFilter(order, kitchen.getDish()),
                     kitchen.chopFilter(order, kitchen.getDish()),

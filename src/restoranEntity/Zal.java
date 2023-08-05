@@ -27,10 +27,8 @@ public class Zal {
 
         for (String item : items) {
             order.add(item);
-
         }
 
-        System.out.println(order);
         return order;
     }
 
