@@ -17,17 +17,25 @@ public class Cook extends Thread {
     private final Object lock1 = new Object();
     private String name;
     private Stove stove;
-    volatile List<String> order;
+    volatile Dish dish;
     private final Lock lock;
     private Table table;
 
-    public Cook(String name, Stove stove, List<String> order, Lock lock, Table table) {
+    public Cook(String name, Stove stove, Dish dish, Lock lock, Table table) {
         this.name = name;
         this.stove = stove;
-        this.order = order;
+        this.dish = dish;
         this.lock = lock;
         this.table = table;
 
+    }
+
+    public Dish getDish() {
+        return dish;
+    }
+
+    public void setDish(Dish dish) {
+        this.dish = dish;
     }
 
     public synchronized void addSpices(Dish dish) {
@@ -52,29 +60,7 @@ public class Cook extends Thread {
     }
 
 
-    public  void startCook(HashSet<Dish> finalOrder) {
-        Deque<Dish> queOfDish = new ArrayDeque<>(finalOrder);
-        queOfDish.stream()
-                .map(Dish::getName)
-                .forEach(dish -> System.out.println(dish + " que " + Thread.currentThread().getName()));
-        try {
-            for (Dish dish : queOfDish) {
-                if (dish.getStates().contains(States.FRIED) || dish.getStates().contains(States.BOLED)) {
-                    useTheStove(dish);
-                }
-                if (dish.getStates().contains(States.CHOPPED)
-                        || dish.getStates().contains(States.WITH_SAUCE)
-                        || dish.getStates().contains(States.WITH_SPICES)) {
-                    useTheTable(dish);
-                }
-            }
 
-        }catch (InterruptedException e){
-            System.out.println(e);
-        }
-
-
-    }
 
     private synchronized void useTheStove(Dish dish) throws InterruptedException {
         if (stove.getAvailiableSpots() > 0) {
@@ -109,10 +95,12 @@ public class Cook extends Thread {
 
     @Override
     public void run() {
-        Kitchen kitchen = new Kitchen();
-        startCook(kitchen.filterOrder(order,kitchen.getDish()));
-
-
+        try {
+            useTheTable(dish);
+            useTheStove(dish);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

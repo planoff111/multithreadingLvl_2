@@ -16,7 +16,7 @@ public class Zal {
         System.out.println("Дуже приємно " + customer.getName());
     }
 
-    public synchronized List<String> getOrder() throws InterruptedException {
+    public synchronized List<String> getOrder()  {
         List<String> order = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введіть ваше замовлення через кому без дублів і без пробілів і страви, які є в наявності!");
